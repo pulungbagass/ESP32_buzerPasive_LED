@@ -1,18 +1,36 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+#define BUZZER_PIN 26
+#define LED_PIN    25
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+#define BUZZER_CHANNEL 0
+
+void beep(int freq, int duration)
+{
+    digitalWrite(LED_PIN, HIGH);
+
+    ledcWriteTone(BUZZER_CHANNEL, freq);
+    delay(duration);
+
+    ledcWriteTone(BUZZER_CHANNEL, 0);
+
+    digitalWrite(LED_PIN, LOW);
+    delay(100);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void setup()
+{
+    pinMode(LED_PIN, OUTPUT);
+
+    ledcSetup(BUZZER_CHANNEL, 2000, 8);
+    ledcAttachPin(BUZZER_PIN, BUZZER_CHANNEL);
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+void loop()
+{
+    beep(2000, 300); // tinggi
+    beep(1200, 300); // sedang
+    beep(600, 300);  // rendah
+
+    delay(2000);
 }
